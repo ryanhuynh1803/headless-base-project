@@ -7,6 +7,7 @@ export const PostsPage = () => {
   const { data, isLoading, error } = usePostsQuery(10, page);
 
   const handleLoadMore = () => {
+    if (!data?.data) return; // Thêm kiểm tra này
     setPage(prev => prev + 1);
   };
 
@@ -19,7 +20,7 @@ export const PostsPage = () => {
         isLoading={isLoading}
         error={error}
         onLoadMore={handleLoadMore}
-        hasMore={data ? data.total > data.data.length : false}
+        hasMore={data ? data.total > (data.data?.length || 0) : false} // Thêm kiểm tra length
       />
     </div>
   );
