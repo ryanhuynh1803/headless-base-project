@@ -3,7 +3,7 @@ import { showError } from '@/utils/toast';
 
 export const useSafeQuery = (
   query: any,
-  options: QueryHookOptions = {} // Add default empty object
+  options: QueryHookOptions = {}
 ) => {
   return useQuery(query, {
     ...options,
@@ -16,7 +16,7 @@ export const useSafeQuery = (
 
 export const useSafeMutation = (
   mutation: any, 
-  options: MutationHookOptions = {} // Add default empty object
+  options: MutationHookOptions = {}
 ) => {
   return useMutation(mutation, {
     ...options,

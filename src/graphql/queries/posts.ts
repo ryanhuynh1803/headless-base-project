@@ -9,15 +9,6 @@ const POST_FRAGMENT = gql`
   }
 `;
 
-export const GET_POST = gql`
-  ${POST_FRAGMENT}
-  query GetPost($id: ID!) {
-    post(id: $id) {
-      ...PostFields
-    }
-  }
-`;
-
 export const GET_POSTS = gql`
   ${POST_FRAGMENT}
   query GetPosts($first: Int, $after: String) {
@@ -27,7 +18,18 @@ export const GET_POSTS = gql`
       }
       pageInfo {
         hasNextPage
+        endCursor
       }
+    }
+  }
+`;
+
+export const GET_POST = gql`
+  ${POST_FRAGMENT}
+  query GetPost($id: ID!) {
+    post(id: $id, idType: DATABASE_ID) {
+      ...PostFields
+      content
     }
   }
 `;

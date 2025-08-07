@@ -3,6 +3,8 @@ export interface Post {
   title: string;
   slug: string;
   date: string;
+  body?: string;
+  content?: string;
 }
 
 export interface PostsData {

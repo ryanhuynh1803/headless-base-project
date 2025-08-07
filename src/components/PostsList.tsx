@@ -1,7 +1,7 @@
 import { Post } from '@/types/post';
 import { Button } from '@/components/ui/button';
-import { PostSkeleton } from './PostSkeleton';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { PostSkeleton } from '@/components/PostSkeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 
 interface PostsListProps {
@@ -21,7 +21,7 @@ export const PostsList = ({
   hasMore = false,
   isFetchingMore = false
 }: PostsListProps) => {
-  if (isLoading && posts.length === 0) {
+  if (isLoading) {
     return (
       <div className="space-y-6">
         {[...Array(5)].map((_, i) => <PostSkeleton key={i} />)}
@@ -44,20 +44,22 @@ export const PostsList = ({
   }
 
   return (
-    <div className="space-y-4">
-      {posts.map((post) => (
-        <div key={post.id} className="p-4 border rounded-lg shadow-sm">
-          <h3 className="font-bold text-lg">{post.title}</h3>
-          {(post as any).body && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{(post as any).body}</p>}
-        </div>
-      ))}
+    <div className="space-y-8">
+      <ul className="space-y-6">
+        {posts.map((post) => (
+          <li key={post.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+            <h3 className="text-xl font-semibold">{post.title}</h3>
+            <p className="text-sm text-gray-500 mt-1">{post.body}</p>
+          </li>
+        ))}
+      </ul>
       {hasMore && onLoadMore && (
-        <div className="mt-8 text-center">
+        <div className="text-center">
           <Button 
             onClick={onLoadMore}
-            disabled={isLoading || isFetchingMore}
+            disabled={isFetchingMore}
           >
-            {(isLoading || isFetchingMore) ? 'Đang tải...' : 'Tải thêm'}
+            {isFetchingMore ? 'Đang tải...' : 'Tải thêm'}
           </Button>
         </div>
       )}

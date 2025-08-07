@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_POSTS } from '@/graphql/queries/posts';
 import { Post } from '@/types/post';
@@ -10,12 +10,12 @@ import { AlertCircle } from 'lucide-react';
 const POSTS_PER_PAGE = 5;
 
 const Home = () => {
-  const [page, setPage] = useState(1);
   const { loading, error, data, fetchMore } = useQuery<{ 
     posts: { 
       nodes: Post[];
       pageInfo: {
         hasNextPage: boolean;
+        endCursor: string;
       }
     } 
   }>(GET_POSTS, {
@@ -23,9 +23,11 @@ const Home = () => {
   });
 
   const loadMore = () => {
+    if (!data?.posts.pageInfo.hasNextPage) return;
+
     fetchMore({
       variables: {
-        after: data?.posts.nodes[data.posts.nodes.length - 1].id,
+        after: data.posts.pageInfo.endCursor,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
@@ -37,7 +39,6 @@ const Home = () => {
         };
       },
     });
-    setPage(p => p + 1);
   };
 
   if (error) return (
