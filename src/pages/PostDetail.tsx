@@ -1,9 +1,21 @@
-import { useQuery } from '@apollo/client';
-import { GET_POST } from '@/graphql/queries/posts';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
-const PostDetail = ({ params }: { params: { id: string } }) => {
-  const { data } = useQuery(GET_POST, {
-    variables: { id: params.id }
-  });
-  // ... rest of component
+const PostDetail = () => {
+  const { id } = useParams();
+  const { data } = useQuery(GET_POST, { variables: { id } });
+
+  const formattedDate = useMemo(() => {
+    return data?.post?.date 
+      ? new Date(data.post.date).toLocaleDateString() 
+      : null;
+  }, [data?.post?.date]);
+
+  if (!data?.post) return <NotFound />;
+
+  return (
+    <article>
+      {/* Render optimized content */}
+    </article>
+  );
 };
