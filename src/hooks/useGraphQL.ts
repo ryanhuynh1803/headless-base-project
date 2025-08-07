@@ -1,7 +1,11 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, QueryHookOptions, MutationHookOptions } from '@apollo/client';
 import { showError } from '@/utils/toast';
 
-export const useGraphQLQuery = (query, options = {}) => {
+type GraphQLOptions = {
+  onError?: (error: Error) => void;
+};
+
+export const useGraphQLQuery = (query: any, options: QueryHookOptions & GraphQLOptions = {}) => {
   const result = useQuery(query, {
     ...options,
     onError: (error) => {
@@ -13,7 +17,7 @@ export const useGraphQLQuery = (query, options = {}) => {
   return result;
 };
 
-export const useGraphQLMutation = (mutation, options = {}) => {
+export const useGraphQLMutation = (mutation: any, options: MutationHookOptions & GraphQLOptions = {}) => {
   const [mutate, result] = useMutation(mutation, {
     ...options,
     onError: (error) => {
