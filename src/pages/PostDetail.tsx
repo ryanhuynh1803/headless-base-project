@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useSafeQuery } from '@/hooks/useGraphQL';
 import { GET_POST } from '@/graphql/queries/posts';
 import NotFound from '@/pages/NotFound';
 import { PostSkeleton } from '@/components/PostSkeleton';
@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useQuery<{ post: Post }>(GET_POST, {
+  const { data, loading, error } = useSafeQuery<{ post: Post }>(GET_POST, {
     variables: { id },
     skip: !id,
   });

@@ -1,18 +1,16 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useSafeQuery } from '@/hooks/useGraphQL';
 import { GET_POSTS } from '@/graphql/queries/posts';
 import { Post } from '@/types/post';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PostItem from '@/components/PostItem';
 
 const POSTS_PER_PAGE = 5;
 
 const Home = () => {
-  const { loading, error, data, fetchMore } = useQuery<{ 
+  const { loading, error, data, fetchMore } = useSafeQuery<{ 
     posts: { 
       nodes: Post[];
       pageInfo: {
@@ -50,14 +48,8 @@ const Home = () => {
   };
 
   if (error) return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Lỗi</AlertTitle>
-        <AlertDescription>
-          {error.message}
-        </AlertDescription>
-      </Alert>
+    <div className="max-w-3xl mx-auto px-4 py-10 text-center">
+      <p className="text-red-500">Đã xảy ra lỗi khi tải bài viết. Vui lòng thử lại.</p>
     </div>
   );
 

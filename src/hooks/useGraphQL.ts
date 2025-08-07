@@ -1,28 +1,41 @@
-import { useQuery, useMutation, QueryHookOptions, MutationHookOptions } from '@apollo/client';
+import {
+  useQuery,
+  useMutation,
+  QueryHookOptions,
+  MutationHookOptions,
+  OperationVariables,
+  DocumentNode,
+} from '@apollo/client';
 import { showError } from '@/utils/toast';
 
-export const useSafeQuery = (
-  query: any,
-  options: QueryHookOptions = {} // Add default empty object
+export const useSafeQuery = <
+  TData = any,
+  TVariables extends OperationVariables = OperationVariables,
+>(
+  query: DocumentNode,
+  options?: QueryHookOptions<TData, TVariables>,
 ) => {
-  return useQuery(query, {
+  return useQuery<TData, TVariables>(query, {
     ...options,
     onError: (error) => {
       showError(error.message);
-      options.onError?.(error);
+      options?.onError?.(error);
     },
   });
 };
 
-export const useSafeMutation = (
-  mutation: any, 
-  options: MutationHookOptions = {} // Add default empty object
+export const useSafeMutation = <
+  TData = any,
+  TVariables extends OperationVariables = OperationVariables,
+>(
+  mutation: DocumentNode,
+  options?: MutationHookOptions<TData, TVariables>,
 ) => {
-  return useMutation(mutation, {
+  return useMutation<TData, TVariables>(mutation, {
     ...options,
     onError: (error) => {
       showError(error.message);
-      options.onError?.(error);
+      options?.onError?.(error);
     },
   });
 };
