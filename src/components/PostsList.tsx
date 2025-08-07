@@ -1,6 +1,10 @@
-import { Post } from '@/types/post';
-import { Button } from '@/components/ui/button';
-import { PostSkeleton } from './PostSkeleton';
+import { Post } from "@/types/post";
+import { Button } from "@/components/ui/button";
+import { PostSkeleton } from "./PostSkeleton";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertCircle } from "lucide-react";
+import PostItem from "./PostItem";
+import { useNavigate } from "react-router-dom";
 
 interface PostsListProps {
   posts: Post[];
@@ -19,6 +23,12 @@ export const PostsList = ({
   hasMore = false,
   isFetchingMore = false
 }: PostsListProps) => {
+  const navigate = useNavigate();
+
+  const handlePostClick = (id: string) => {
+    navigate(`/posts/${id}`);
+  };
+
   if (isLoading && posts.length === 0) {
     return (
       <div className="space-y-6">
@@ -28,30 +38,33 @@ export const PostsList = ({
   }
 
   if (error) {
-    return <p className="text-red-500 text-center">Đã xảy ra lỗi: {error.message}</p>;
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{error.message}</AlertDescription>
+      </Alert>
+    );
   }
 
-  if (!isLoading && posts.length === 0) {
-    return <p className="text-center text-gray-500">Không có bài viết nào.</p>;
+  if (posts.length === 0) {
+    return <p>No posts found.</p>;
   }
 
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        {posts.map(post => (
-          <div key={post.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="font-bold text-xl mb-2">{post.title}</h3>
-            <p className="text-gray-700">{post.body}</p>
-          </div>
+        {posts.map((post) => (
+          <PostItem key={post.id} post={post} onClick={handlePostClick} />
         ))}
       </div>
-      {hasMore && onLoadMore && (
-        <div className="mt-8 text-center">
+      {hasMore && (
+        <div className="text-center mt-8">
           <Button 
             onClick={onLoadMore}
-            disabled={isFetchingMore}
+            disabled={isLoading || isFetchingMore}
           >
-            {(isFetchingMore) ? 'Đang tải...' : 'Tải thêm'}
+            {(isLoading || isFetchingMore) ? 'Đang tải...' : 'Tải thêm'}
           </Button>
         </div>
       )}

@@ -4,8 +4,8 @@ const POST_FRAGMENT = gql`
   fragment PostFields on Post {
     id
     title
-    date
     slug
+    date
   }
 `;
 
@@ -19,12 +19,11 @@ export const GET_POST = gql`
 `;
 
 export const GET_POSTS = gql`
+  ${POST_FRAGMENT}
   query GetPosts($first: Int, $after: String) {
     posts(first: $first, after: $after) {
       nodes {
-        id
-        title
-        date
+        ...PostFields
       }
       pageInfo {
         hasNextPage
