@@ -1,14 +1,11 @@
 "use client";
 
-import { useQuery } from '@apollo/client';
 import { GET_POSTS } from '@/graphql/queries/posts';
-import { Post, PostsData } from '@/types/post';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
+import { useGraphQLQuery } from '@/hooks/useGraphQL';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const PostsList = () => {
-  const { loading, error, data } = useQuery<PostsData>(GET_POSTS);
+  const { loading, error, data } = useGraphQLQuery(GET_POSTS);
 
   if (loading) return (
     <div className="space-y-4">
@@ -21,19 +18,10 @@ const PostsList = () => {
     </div>
   );
 
-  if (error) return (
-    <Alert variant="destructive">
-      <Terminal className="h-4 w-4" />
-      <AlertTitle>Error loading posts</AlertTitle>
-      <AlertDescription>
-        {error.message}
-      </AlertDescription>
-    </Alert>
-  );
-
+  // Error handling is now automatic via the hook
   return (
     <div className="space-y-4">
-      {data?.posts.nodes.map((post: Post) => (
+      {data?.posts.nodes.map((post) => (
         <div key={post.id} className="p-4 border rounded-lg hover:bg-accent transition-colors">
           <h3 className="text-lg font-medium">{post.title}</h3>
           <p className="text-sm text-muted-foreground">{post.date}</p>
