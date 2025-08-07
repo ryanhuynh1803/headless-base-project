@@ -1,2 +1,7 @@
-// Add at bottom of file:
+const App = () => {
+  return (
+    // Your router and layout here
+  );
+};
+
 export default App;
