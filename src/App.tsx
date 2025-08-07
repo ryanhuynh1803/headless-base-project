@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Page from '@/app/page';
+import Home from '@/pages/Home';
 import PostsPage from '@/pages/PostsPage';
 import PostDetail from '@/pages/PostDetail';
 
@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Page />} />
+        <Route path="/" element={<Home />} />
         <Route path="/posts" element={<PostsPage />} />
         <Route path="/posts/:id" element={<PostDetail />} />
       </Routes>
