@@ -1,1 +1,1 @@
-import { Link } from 'react-router-dom'; // Replace next/link with react-router-dom
+import { Link } from 'react-router-dom'; // Changed from next/link
