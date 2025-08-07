@@ -4,32 +4,32 @@ const POST_FRAGMENT = gql`
   fragment PostFields on Post {
     id
     title
-    slug
     date
-  }
-`;
-
-export const GET_POSTS = gql`
-  ${POST_FRAGMENT}
-  query GetPosts($first: Int, $after: String) {
-    posts(first: $first, after: $after) {
-      nodes {
-        ...PostFields
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-    }
+    slug
   }
 `;
 
 export const GET_POST = gql`
   ${POST_FRAGMENT}
   query GetPost($id: ID!) {
-    post(id: $id, idType: DATABASE_ID) {
+    post(id: $id) {
       ...PostFields
-      content
+    }
+  }
+`;
+
+export const GET_POSTS = gql`
+  query GetPosts($first: Int, $after: String) {
+    posts(first: $first, after: $after) {
+      nodes {
+        id
+        title
+        date
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `;

@@ -1,8 +1,6 @@
 import { Post } from '@/types/post';
 import { Button } from '@/components/ui/button';
-import { PostSkeleton } from '@/components/PostSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { PostSkeleton } from './PostSkeleton';
 
 interface PostsListProps {
   posts: Post[];
@@ -21,7 +19,7 @@ export const PostsList = ({
   hasMore = false,
   isFetchingMore = false
 }: PostsListProps) => {
-  if (isLoading) {
+  if (isLoading && posts.length === 0) {
     return (
       <div className="space-y-6">
         {[...Array(5)].map((_, i) => <PostSkeleton key={i} />)}
@@ -30,36 +28,30 @@ export const PostsList = ({
   }
 
   if (error) {
-    return (
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error.message}</AlertDescription>
-      </Alert>
-    );
+    return <p className="text-red-500 text-center">Đã xảy ra lỗi: {error.message}</p>;
   }
 
-  if (posts.length === 0) {
-    return <p>No posts found.</p>;
+  if (!isLoading && posts.length === 0) {
+    return <p className="text-center text-gray-500">Không có bài viết nào.</p>;
   }
 
   return (
-    <div className="space-y-8">
-      <ul className="space-y-6">
-        {posts.map((post) => (
-          <li key={post.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
-            <h3 className="text-xl font-semibold">{post.title}</h3>
-            <p className="text-sm text-gray-500 mt-1">{post.body}</p>
-          </li>
+    <div className="space-y-6">
+      <div className="space-y-4">
+        {posts.map(post => (
+          <div key={post.id} className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="font-bold text-xl mb-2">{post.title}</h3>
+            <p className="text-gray-700">{post.body}</p>
+          </div>
         ))}
-      </ul>
+      </div>
       {hasMore && onLoadMore && (
-        <div className="text-center">
+        <div className="mt-8 text-center">
           <Button 
             onClick={onLoadMore}
             disabled={isFetchingMore}
           >
-            {isFetchingMore ? 'Đang tải...' : 'Tải thêm'}
+            {(isFetchingMore) ? 'Đang tải...' : 'Tải thêm'}
           </Button>
         </div>
       )}
