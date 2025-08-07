@@ -1,4 +1,4 @@
-import { QueryHookOptions, MutationHookOptions, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, QueryHookOptions, MutationHookOptions } from '@apollo/client';
 import { showError } from '@/utils/toast';
 
 export const useSafeQuery = (
