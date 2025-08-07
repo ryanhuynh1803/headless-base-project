@@ -7,9 +7,16 @@ export const GET_POSTS = gql`
         id
         title
         date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
       }
       pageInfo {
         hasNextPage
+        endCursor
       }
     }
   }
