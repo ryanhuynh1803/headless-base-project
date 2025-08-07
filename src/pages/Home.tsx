@@ -6,6 +6,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import PostItem from '@/components/PostItem';
 
 const POSTS_PER_PAGE = 5;
 
@@ -21,6 +23,12 @@ const Home = () => {
   }>(GET_POSTS, {
     variables: { first: POSTS_PER_PAGE },
   });
+
+  const navigate = useNavigate();
+
+  const handlePostClick = (id: string) => {
+    navigate(`/posts/${id}`);
+  };
 
   const loadMore = () => {
     if (!data?.posts.pageInfo.hasNextPage) return;
@@ -77,21 +85,11 @@ const Home = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">📰 Bài viết mới nhất</h2>
-      <ul className="space-y-4 mb-8">
+      <div className="space-y-4 mb-8">
         {data.posts.nodes.map((post) => (
-          <li
-            key={post.id}
-            className="bg-white shadow-md rounded-xl p-5 hover:shadow-lg transition-shadow duration-200"
-          >
-            <h3 className="text-xl font-semibold text-gray-800">{post.title}</h3>
-            {post.date && (
-              <p className="text-sm text-gray-500 mt-1">
-                📅 {new Date(post.date).toLocaleDateString()}
-              </p>
-            )}
-          </li>
+          <PostItem key={post.id} post={post} onClick={handlePostClick} />
         ))}
-      </ul>
+      </div>
 
       {data.posts.pageInfo.hasNextPage && (
         <div className="text-center">
